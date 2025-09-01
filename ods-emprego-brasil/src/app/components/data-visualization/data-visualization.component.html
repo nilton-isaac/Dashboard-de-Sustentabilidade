@@ -1,0 +1,291 @@
+<div class="data-visualization-container p-6 space-y-8">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="flex items-center justify-center py-12">
+    <div class="glass-card p-8 text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-magenta-500 mx-auto mb-4"></div>
+      <p class="text-white text-lg font-medium">Carregando dados da API do IBGE...</p>
+      <p class="text-text-mute text-sm mt-2">Aguarde enquanto buscamos as informações mais recentes</p>
+    </div>
+  </div>
+
+  <!-- KPI Cards Section -->
+  <section class="kpi-section" *ngIf="!isLoading">
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+      <mat-icon class="text-3xl">bar_chart</mat-icon>
+      Indicadores Principais
+      <span class="text-sm bg-green-500/20 text-green-400 px-2 py-1 rounded-full">API IBGE</span>
+    </h2>
+    
+    <!-- No KPI Data Message -->
+    <div *ngIf="kpiData.length === 0" class="glass-card p-8 text-center">
+      <mat-icon class="text-4xl mb-4">bar_chart</mat-icon>
+      <p class="text-text-mute text-lg">Indicadores não disponíveis</p>
+      <p class="text-text-mute text-sm">Aguarde enquanto carregamos os dados do IBGE</p>
+    </div>
+    
+    <!-- KPI Cards with Data -->
+    <div *ngIf="kpiData.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div 
+        *ngFor="let kpi of kpiData; let i = index" 
+        class="kpi-card group cursor-pointer transform transition-all duration-300 hover:scale-105"
+        [style.animation-delay]="i * 100 + 'ms'"
+      >
+        <div class="glass-card p-6 h-full relative overflow-hidden">
+          <!-- Background Gradient -->
+          <div class="absolute inset-0 bg-gradient-to-br opacity-10" [ngClass]="getKpiColorClass(kpi.color)"></div>
+          
+          <!-- Content -->
+          <div class="relative z-10">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+              <mat-icon class="text-2xl">{{ kpi.icon }}</mat-icon>
+              <div class="flex items-center gap-1 text-sm" [ngClass]="getTrendColor(kpi.trend)">
+                <mat-icon class="text-sm">{{ getTrendIcon(kpi.trend) }}</mat-icon>
+                <span class="font-medium">{{ kpi.change > 0 ? '+' : '' }}{{ kpi.change }}%</span>
+              </div>
+            </div>
+            
+            <!-- Title & Value -->
+            <h3 class="text-text-mute text-sm font-medium mb-2">{{ kpi.title }}</h3>
+            <div class="text-3xl font-bold text-white mb-3 kpi-value">{{ kpi.value }}</div>
+            
+            <!-- Progress Bar -->
+            <div class="mb-3">
+              <div class="flex justify-between text-xs text-text-mute mb-1">
+                <span>Progresso</span>
+                <span>{{ kpi.progress }}%</span>
+              </div>
+              <div class="w-full bg-surface-dark rounded-full h-2 overflow-hidden">
+                <div 
+                  class="h-full bg-gradient-to-r transition-all duration-1000 ease-out rounded-full progress-bar"
+                  [ngClass]="getKpiColorClass(kpi.color)"
+                  [style.width]="kpi.progress + '%'"
+                ></div>
+              </div>
+            </div>
+            
+            <!-- Description -->
+            <p class="text-xs text-text-mute">{{ kpi.description }}</p>
+          </div>
+          
+          <!-- Hover Effect -->
+          <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-20 transition-opacity duration-300" [ngClass]="getKpiColorClass(kpi.color)"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Charts Section -->
+  <section class="charts-section" *ngIf="!isLoading">
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+      <mat-icon class="text-3xl">trending_up</mat-icon>
+      Tendências Temporais
+      <span class="text-sm bg-green-500/20 text-green-400 px-2 py-1 rounded-full">Dados Reais</span>
+    </h2>
+    
+    <div class="glass-card p-6">
+      <!-- Chart Selector -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <button 
+          *ngFor="let chart of ['unemployment', 'jobs', 'salary']" 
+          (click)="selectChart(chart)"
+          class="px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
+          [class]="selectedChart === chart ? 
+            'bg-gradient-to-r from-magenta-500 to-pink-500 text-white shadow-lg shadow-magenta-500/25' : 
+            'bg-surface-dark text-text-mute hover:bg-surface-light hover:text-white'"
+        >
+          {{ chart === 'unemployment' ? 'Desemprego' : chart === 'jobs' ? 'Vagas' : 'Salários' }}
+        </button>
+      </div>
+      
+      <!-- Chart Area -->
+      <div class="chart-container h-64 relative">
+        <!-- No Data Message -->
+        <div *ngIf="getChartData(selectedChart).values.length === 0" class="flex items-center justify-center h-full">
+          <div class="text-center">
+            <mat-icon class="text-4xl mb-4">bar_chart</mat-icon>
+            <p class="text-text-mute text-lg">Dados não disponíveis</p>
+            <p class="text-text-mute text-sm">Verifique sua conexão ou tente novamente</p>
+          </div>
+        </div>
+        
+        <!-- Chart with Data -->
+        <div *ngIf="getChartData(selectedChart).values.length > 0" class="flex items-end justify-between h-full px-4 pb-8">
+          <div 
+            *ngFor="let value of getChartData(selectedChart).values; let i = index"
+            class="chart-bar flex-1 mx-1 relative group cursor-pointer"
+          >
+            <div 
+              class="bg-gradient-to-t rounded-t-lg transition-all duration-500 ease-out transform hover:scale-105"
+              [ngClass]="getChartData(selectedChart).color"
+              [style.height]="getChartHeight(value, getMaxValue(getChartData(selectedChart).values)) + '%'"
+            >
+              <!-- Value Tooltip -->
+              <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-surface-dark px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                {{ selectedChart === 'salary' ? formatCurrency(value) : value + (selectedChart === 'unemployment' ? '%' : selectedChart === 'jobs' ? 'M' : '') }}
+              </div>
+            </div>
+            
+            <!-- Label -->
+            <div class="text-center text-xs text-text-mute mt-2">
+              {{ getChartData(selectedChart).labels[i] }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regional Analysis -->
+  <section class="regional-section">
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+      <mat-icon class="text-3xl">map</mat-icon>
+      Análise Regional
+    </h2>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Regional Cards -->
+      <div class="space-y-4">
+        <!-- No Regional Data Message -->
+        <div *ngIf="regionalData.length === 0" class="glass-card p-6 text-center">
+          <mat-icon class="text-4xl mb-4">map</mat-icon>
+          <p class="text-text-mute text-lg">Dados regionais não disponíveis</p>
+          <p class="text-text-mute text-sm">Aguarde enquanto carregamos as informações</p>
+        </div>
+        
+        <!-- Regional Cards with Data -->
+        <div 
+          *ngFor="let region of regionalData"
+          (click)="selectRegion(region.region)"
+          class="regional-card glass-card p-4 cursor-pointer transition-all duration-300 transform hover:scale-102"
+          [class.selected]="selectedRegion === region.region"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <h3 class="font-bold text-white mb-2">{{ region.region }}</h3>
+              <div class="grid grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span class="text-text-mute block">Desemprego</span>
+                  <span class="text-white font-medium">{{ region.unemployment }}%</span>
+                </div>
+                <div>
+                  <span class="text-text-mute block">Vagas</span>
+                  <span class="text-white font-medium">{{ formatNumber(region.jobs) }}</span>
+                </div>
+                <div>
+                  <span class="text-text-mute block">Salário</span>
+                  <span class="text-white font-medium">{{ formatCurrency(region.salary) }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Visual Indicator -->
+            <div class="w-4 h-16 rounded-full bg-gradient-to-t ml-4" [ngClass]="region.color"></div>
+          </div>
+          
+          <!-- Expanded Details -->
+          <div *ngIf="selectedRegion === region.region" class="mt-4 pt-4 border-t border-surface-light">
+            <div class="grid grid-cols-2 gap-4 text-xs">
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-text-mute">Taxa de Crescimento:</span>
+                  <span class="text-green-400">+2.3%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-text-mute">Setores em Alta:</span>
+                  <span class="text-white">3</span>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-text-mute">Formalização:</span>
+                  <span class="text-cyan-400">68.5%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-text-mute">Programas Ativos:</span>
+                  <span class="text-white">12</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Regional Chart Placeholder -->
+      <div class="glass-card p-6">
+        <h3 class="text-lg font-bold text-white mb-4">Comparativo Regional</h3>
+        <div class="space-y-4">
+          <div *ngFor="let region of regionalData" class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-gradient-to-r" [ngClass]="region.color"></div>
+            <span class="text-sm text-white flex-1">{{ region.region }}</span>
+            <div class="flex items-center gap-2">
+              <div class="w-20 bg-surface-dark rounded-full h-2">
+                <div 
+                  class="h-full bg-gradient-to-r rounded-full transition-all duration-1000"
+                  [ngClass]="region.color"
+                  [style.width]="(100 - region.unemployment) * 0.8 + '%'"
+                ></div>
+              </div>
+              <span class="text-xs text-text-mute w-12">{{ region.unemployment }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sector Growth -->
+  <section class="sector-section">
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+      <mat-icon class="text-3xl">rocket_launch</mat-icon>
+      Setores em Crescimento
+    </h2>
+    
+    <!-- No Sector Data Message -->
+    <div *ngIf="sectorData.length === 0" class="glass-card p-8 text-center">
+      <mat-icon class="text-4xl mb-4">rocket_launch</mat-icon>
+      <p class="text-text-mute text-lg">Dados setoriais não disponíveis</p>
+      <p class="text-text-mute text-sm">Aguarde enquanto carregamos as informações dos setores</p>
+    </div>
+    
+    <!-- Sector Cards with Data -->
+    <div *ngIf="sectorData.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div 
+        *ngFor="let sector of sectorData; let i = index"
+        class="sector-card glass-card p-6 group cursor-pointer transition-all duration-300 transform hover:scale-105"
+        [style.animation-delay]="i * 150 + 'ms'"
+      >
+        <div class="text-center">
+          <!-- Icon -->
+          <mat-icon class="text-4xl mb-3">{{ sector.icon }}</mat-icon>
+          
+          <!-- Name -->
+          <h3 class="font-bold text-white mb-2">{{ sector.name }}</h3>
+          
+          <!-- Growth Badge -->
+          <div class="inline-flex items-center gap-1 bg-gradient-to-r px-3 py-1 rounded-full text-sm font-medium text-white mb-4" [ngClass]="sector.color">
+            <mat-icon class="text-sm">trending_up</mat-icon>
+            <span>+{{ sector.growth }}%</span>
+          </div>
+          
+          <!-- Stats -->
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-text-mute">Vagas:</span>
+              <span class="text-white font-medium">{{ formatNumber(sector.jobs) }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-text-mute">Salário Médio:</span>
+              <span class="text-white font-medium">{{ formatCurrency(sector.avgSalary) }}</span>
+            </div>
+          </div>
+          
+          <!-- Action Button -->
+          <button class="w-full mt-4 px-4 py-2 bg-surface-dark hover:bg-surface-light text-white rounded-lg transition-all duration-300 transform hover:scale-105 text-sm font-medium">
+            Ver Oportunidades
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

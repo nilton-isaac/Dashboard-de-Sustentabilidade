@@ -1,0 +1,162 @@
+<!-- Seção Trilhas de Carreira -->
+<section class="space-y-8">
+  <!-- Cabeçalho da Seção -->
+  <div class="text-center space-y-3">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mag-500/15 text-mag-500 text-xs font-medium uppercase tracking-wider">
+      <span>ODS 8 • Trabalho Decente</span>
+    </div>
+    <h2 class="text-3xl font-extrabold text-text-base">Trilhas de Carreira</h2>
+    <p class="text-text-mute max-w-2xl mx-auto">Explore caminhos profissionais estruturados com skills, salários e formação necessária</p>
+  </div>
+
+  <!-- Seletor de Áreas -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <button *ngFor="let area of careerAreas" 
+            (click)="selectArea(area)"
+            [class]="'group relative rounded-xl p-5 bg-white/5 backdrop-blur border transition-all duration-200 ' + 
+                     (selectedArea?.name === area.name ? 
+                      'border-mag-500/60 bg-mag-500/10 shadow-glow' : 
+                      'border-white/10 hover:border-mag-500/40 hover:bg-white/10')">
+      <div class="flex items-center gap-4">
+        <div class="p-3 rounded-lg bg-gradient-to-br from-mag-500/20 to-cyan-400/20 text-2xl">
+          <mat-icon>{{ area.icon }}</mat-icon>
+        </div>
+        <div class="text-left">
+          <h3 class="font-bold text-text-base group-hover:text-white transition-colors">{{ area.name }}</h3>
+          <p class="text-sm text-text-mute mt-1">{{ area.description }}</p>
+        </div>
+      </div>
+      <div *ngIf="selectedArea?.name === area.name" 
+           class="absolute -top-1 -right-1 w-3 h-3 bg-mag-500 rounded-full animate-pulse"></div>
+    </button>
+  </div>
+
+  <!-- Skill Tree da Área Selecionada -->
+  <div *ngIf="selectedArea" class="space-y-8">
+    <!-- Header da Área -->
+    <div class="text-center p-8 rounded-xl bg-gradient-to-br from-ink-800/60 to-ink-900/60 border border-white/10">
+      <div class="text-5xl mb-4"><mat-icon style="font-size: 3rem; width: 3rem; height: 3rem;">{{ selectedArea.icon }}</mat-icon></div>
+      <h3 class="text-2xl font-extrabold text-text-base mb-2">{{ selectedArea.name }}</h3>
+      <p class="text-text-mute max-w-md mx-auto">{{ selectedArea.description }}</p>
+    </div>
+
+    <!-- Skill Tree Layout -->
+    <div class="relative">
+      <!-- Linha de Progressão -->
+      <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-mag-500/30 via-cyan-400/30 to-mag-500/30 transform -translate-y-1/2 z-0"></div>
+      
+      <!-- Colunas do Skill Tree -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 relative z-10">
+        <!-- Coluna 1: Entrada -->
+        <div class="space-y-4">
+          <h4 class="text-center font-bold text-text-base mb-4 flex items-center justify-center gap-2"><mat-icon>rocket_launch</mat-icon> Entrada</h4>
+          <div *ngFor="let path of selectedArea.careerPaths.slice(0,2)" 
+               class="group rounded-xl p-4 bg-white/5 backdrop-blur border border-white/10 hover:border-mag-500/40 transition-all">
+            <h5 class="font-semibold text-text-base mb-2">{{ path.title }}</h5>
+            <p class="text-xs text-text-mute mb-3">{{ path.description }}</p>
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-green-500"></div>
+              <span class="text-xs font-medium text-text-base">{{ path.levels[0]?.position }}</span>
+            </div>
+            <div class="text-xs text-cyan-400 font-medium mt-1">{{ path.levels[0]?.salary }}</div>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Skills Básicas -->
+        <div class="space-y-4">
+          <h4 class="text-center font-bold text-text-base mb-4 flex items-center justify-center gap-2"><mat-icon>build</mat-icon> Skills Base</h4>
+          <div class="space-y-2">
+            <div *ngFor="let skill of selectedArea.careerPaths[0]?.skills.slice(0,4)" 
+                 class="px-3 py-2 rounded-lg bg-ink-800/60 border border-white/10 text-center">
+              <span class="text-xs font-medium text-text-base">{{ skill }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna 3: Salários -->
+        <div class="space-y-4">
+          <h4 class="text-center font-bold text-text-base mb-4 flex items-center justify-center gap-2"><mat-icon>attach_money</mat-icon> Salários</h4>
+          <div class="space-y-3">
+            <div class="rounded-xl p-4 bg-gradient-to-br from-green-500/10 to-green-600/10 border border-green-500/20">
+              <div class="text-center">
+                <div class="text-xs text-text-mute mb-1">Júnior</div>
+                <div class="text-lg font-bold text-green-400">R$ 3.500</div>
+              </div>
+            </div>
+            <div class="rounded-xl p-4 bg-gradient-to-br from-yellow-500/10 to-yellow-600/10 border border-yellow-500/20">
+              <div class="text-center">
+                <div class="text-xs text-text-mute mb-1">Pleno</div>
+                <div class="text-lg font-bold text-yellow-400">R$ 7.200</div>
+              </div>
+            </div>
+            <div class="rounded-xl p-4 bg-gradient-to-br from-mag-500/10 to-mag-600/10 border border-mag-500/20">
+              <div class="text-center">
+                <div class="text-xs text-text-mute mb-1">Sênior</div>
+                <div class="text-lg font-bold text-mag-400">R$ 12.800</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna 4: Formação -->
+        <div class="space-y-4">
+          <h4 class="text-center font-bold text-text-base mb-4 flex items-center justify-center gap-2"><mat-icon>school</mat-icon> Formação</h4>
+          <div class="space-y-3">
+            <div *ngFor="let education of selectedArea.education.slice(0,3)" 
+                 class="rounded-lg p-3 bg-cyan-400/10 border border-cyan-400/20">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
+                <span class="text-xs font-medium text-text-base">{{ education }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna 5: Vagas -->
+        <div class="space-y-4">
+          <h4 class="text-center font-bold text-text-base mb-4 flex items-center justify-center gap-2"><mat-icon>trending_up</mat-icon> Mercado</h4>
+          <div class="rounded-xl p-4 bg-gradient-to-br from-ink-800/60 to-ink-900/60 border border-white/10">
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-text-mute">Crescimento</span>
+                <span class="text-sm font-bold text-green-400">{{ selectedArea.marketInfo.growth }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-text-mute">Demanda</span>
+                <span class="text-sm font-bold text-mag-400">{{ selectedArea.marketInfo.demand }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-text-mute">Salário Médio</span>
+                <span class="text-sm font-bold text-cyan-400">{{ selectedArea.marketInfo.averageSalary }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Próximos Passos -->
+    <div class="rounded-xl p-6 bg-gradient-to-r from-mag-500/10 to-cyan-400/10 border border-mag-500/20">
+      <h4 class="font-bold text-text-base mb-4 flex items-center gap-2">
+        <mat-icon class="text-mag-500">rocket_launch</mat-icon>
+        Próximos Passos Recomendados
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div *ngFor="let step of selectedArea.nextSteps; let i = index" 
+             class="flex items-start gap-3 p-3 rounded-lg bg-ink-800/40">
+          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-mag-500 text-white text-xs font-bold flex items-center justify-center">
+            {{ i + 1 }}
+          </div>
+          <span class="text-sm text-text-base">{{ step }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado Inicial -->
+  <div *ngIf="!selectedArea" class="text-center py-16">
+    <div class="text-6xl mb-6"><mat-icon style="font-size: 4rem; width: 4rem; height: 4rem;">map</mat-icon></div>
+    <h3 class="text-xl font-bold text-text-base mb-3">Explore Trilhas de Carreira</h3>
+    <p class="text-text-mute max-w-md mx-auto">Selecione uma área acima para visualizar o skill tree completo com progressão de carreira</p>
+  </div>
+</section>

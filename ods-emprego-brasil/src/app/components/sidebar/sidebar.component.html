@@ -1,0 +1,100 @@
+<aside 
+  class="sidebar"
+  [class.collapsed]="isCollapsed"
+  role="navigation"
+  aria-label="Menu lateral de navegação">
+  
+  <!-- Header do Sidebar -->
+  <div class="sidebar-header">
+    <div class="sidebar-brand" [class.hidden]="isCollapsed">
+      <div class="brand-icon">
+        <span class="text-2xl font-extrabold text-mag-500">ODS</span>
+      </div>
+      <div class="brand-text">
+        <h2 class="text-sm font-semibold text-text-base">Dashboard</h2>
+        <p class="text-xs text-text-mute">Emprego Brasil</p>
+      </div>
+    </div>
+    
+    <button 
+      type="button"
+      class="toggle-button"
+      (click)="toggleCollapse()"
+      [attr.aria-label]="isCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'"
+      [attr.aria-expanded]="!isCollapsed">
+      <span class="toggle-icon" [class.rotated]="isCollapsed">
+        <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+      </span>
+    </button>
+  </div>
+  
+  <!-- Indicador para expandir quando recolhido -->
+  <div *ngIf="isCollapsed" class="expand-hint" (click)="toggleCollapse()">
+    <mat-icon class="expand-hint-icon">chevron_right</mat-icon>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="sidebar-nav" role="menu">
+    <ul class="nav-list" role="none">
+      <li 
+        *ngFor="let item of sidebarItems; trackBy: trackByItemId"
+        class="nav-item"
+        role="none">
+        
+        <div 
+          [class]="getItemClasses(item)"
+          (click)="selectItem(item.id)"
+          role="menuitem"
+          [attr.aria-label]="item.label + (item.description ? ': ' + item.description : '')"
+          tabindex="0"
+          (keydown.enter)="selectItem(item.id)"
+          (keydown.space)="selectItem(item.id)">
+          
+          <mat-icon class="item-icon" [attr.aria-hidden]="true">{{ item.icon }}</mat-icon>
+          
+          <div class="item-content" [class.hidden]="isCollapsed">
+            <span class="item-label">{{ item.label }}</span>
+            <span *ngIf="item.description" class="item-description">{{ item.description }}</span>
+          </div>
+          
+          <span 
+            *ngIf="item.badge && !isCollapsed" 
+            class="item-badge"
+            [attr.aria-label]="'Nível: ' + item.badge">
+            {{ item.badge }}
+          </span>
+        </div>
+      </li>
+    </ul>
+  </nav>
+  
+  <!-- Footer do Sidebar -->
+  <div class="sidebar-footer" [class.hidden]="isCollapsed">
+    <div class="footer-content">
+      <div class="footer-stats">
+        <div class="stat-item">
+          <span class="stat-value">8.6%</span>
+          <span class="stat-label">Desemprego</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">2.1M</span>
+          <span class="stat-label">Vagas</span>
+        </div>
+      </div>
+      
+      <div class="footer-info">
+        <p class="text-xs text-text-mute text-center">
+          Dados atualizados em tempo real
+        </p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Overlay para dispositivos móveis -->
+<div 
+  *ngIf="!isCollapsed"
+  class="sidebar-overlay md:hidden"
+  (click)="toggleCollapse()"
+  [attr.aria-hidden]="true">
+</div>

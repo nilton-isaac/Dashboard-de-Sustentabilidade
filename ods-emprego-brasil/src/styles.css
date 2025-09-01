@@ -1,0 +1,782 @@
+/* You can add global styles to this file, and also import other style files */
+/* Import Google Fonts first */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* Import Tailwind base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos globais de acessibilidade */
+
+/* Alto contraste */
+.high-contrast {
+  filter: contrast(150%) brightness(110%);
+}
+
+.high-contrast * {
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.high-contrast a,
+.high-contrast button {
+  text-decoration: underline !important;
+}
+
+.high-contrast button:focus,
+.high-contrast a:focus,
+.high-contrast input:focus,
+.high-contrast select:focus,
+.high-contrast textarea:focus {
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+/* Movimento reduzido */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Navegação por teclado */
+.keyboard-navigation *:focus {
+  outline: 2px solid #667eea !important;
+  outline-offset: 2px !important;
+}
+
+.keyboard-navigation button:focus,
+.keyboard-navigation a:focus,
+.keyboard-navigation input:focus,
+.keyboard-navigation select:focus,
+.keyboard-navigation textarea:focus {
+  outline: 3px solid #ffd700 !important;
+  outline-offset: 2px !important;
+}
+
+/* Esconder outline quando não navegando por teclado */
+body:not(.keyboard-navigation) *:focus {
+  outline: none;
+}
+
+/* Melhorar visibilidade do foco */
+:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Skip links para navegação */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Melhorar contraste de texto */
+.text-low-contrast {
+  color: #4a5568;
+}
+
+.high-contrast .text-low-contrast {
+  color: #000 !important;
+  font-weight: 600 !important;
+}
+
+/* Indicadores visuais para elementos interativos */
+button,
+a,
+input,
+select,
+textarea {
+  position: relative;
+}
+
+/* Melhorar área de toque em dispositivos móveis */
+@media (pointer: coarse) {
+  button,
+  a,
+  input,
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Estilos para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Região de anúncios para leitores de tela */
+.sr-announcements {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Melhorar legibilidade */
+body {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin-bottom: 1em;
+  max-width: 70ch;
+}
+
+/* Melhorar contraste de links */
+a {
+  color: #667eea;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #5a67d8;
+}
+
+a:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.high-contrast a {
+  color: #0000ee !important;
+  font-weight: 600 !important;
+}
+
+.high-contrast a:visited {
+  color: #551a8b !important;
+}
+
+/* Melhorar visibilidade de formulários */
+input,
+select,
+textarea {
+  border: 2px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #667eea;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  border: 3px solid #000 !important;
+  background: #fff !important;
+  color: #000 !important;
+}
+
+.high-contrast input:focus,
+.high-contrast select:focus,
+.high-contrast textarea:focus {
+  border-color: #000 !important;
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+/* Labels de formulário */
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.high-contrast label {
+  color: #000 !important;
+  font-weight: 700 !important;
+}
+
+/* Mensagens de erro */
+.error-message {
+  color: #e53e3e;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.high-contrast .error-message {
+  color: #000 !important;
+  background: #ffff00 !important;
+  padding: 4px !important;
+  border: 2px solid #000 !important;
+}
+
+/* Melhorar botões */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.high-contrast button {
+  border: 3px solid #000 !important;
+  background: #fff !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+}
+
+.high-contrast button:hover {
+  background: #ffff00 !important;
+}
+
+.high-contrast button:focus {
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+/* Tabelas acessíveis */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+th {
+  background: #f7fafc;
+  font-weight: 600;
+}
+
+.high-contrast th,
+.high-contrast td {
+  border: 2px solid #000 !important;
+}
+
+.high-contrast th {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+/* Melhorar listas */
+ul,
+ol {
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.25em;
+}
+
+/* Indicadores de carregamento acessíveis */
+.loading {
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #e2e8f0;
+  border-top: 2px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.reduce-motion .loading::after {
+  animation: none;
+  border: 2px solid #667eea;
+}
+
+/* Melhorar tooltips */
+[title] {
+  position: relative;
+}
+
+/* Responsividade para acessibilidade */
+@media (max-width: 768px) {
+  body {
+    font-size: 18px;
+  }
+  
+  button,
+  input,
+  select {
+    min-height: 48px;
+    font-size: 18px;
+  }
+}
+
+/* Preferências do sistema */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    filter: contrast(150%);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Estilos para modo escuro serão aplicados pelo tema */
+}
+
+/* Melhorar seleção de texto */
+::selection {
+  background: rgba(102, 126, 234, 0.3);
+  color: #1a202c;
+}
+
+.high-contrast ::selection {
+  background: #ffff00 !important;
+  color: #000 !important;
+}
+
+/* ===== GLOBAL STYLES ===== */
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #111A2B; /* bg-ink-900 */
+  color: #E5E7EB; /* text-text-base */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ===== TIPOGRAFIA HIERÁRQUICA ===== */
+.display-title {
+  font-size: 2.25rem; /* text-4xl */
+  letter-spacing: -0.025em; /* tracking-tight */
+  font-weight: 800; /* font-extrabold */
+  
+  @media (min-width: 768px) {
+    font-size: 3rem; /* md:text-5xl */
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: 3.75rem; /* lg:text-6xl */
+  }
+  font-weight: 800;
+}
+
+.section-title {
+  font-size: 1.5rem; /* text-2xl */
+  letter-spacing: -0.025em; /* tracking-tight */
+  font-weight: 800; /* font-extrabold */
+  
+  @media (min-width: 768px) {
+    font-size: 1.875rem; /* md:text-3xl */
+  }
+  font-weight: 700;
+}
+
+.card-title {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: bold;
+  
+  @media (min-width: 768px) {
+    font-size: 1.25rem; /* md:text-xl */
+  }
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  
+  @media (min-width: 768px) {
+    font-size: 1.125rem;
+  }
+  font-weight: 600;
+}
+
+.body-text {
+  font-size: 0.875rem; /* text-sm */
+  
+  @media (min-width: 768px) {
+    font-size: 1rem; /* text-base */
+  }
+  font-weight: 400;
+}
+
+.caption {
+  font-size: 0.75rem; /* text-xs */
+  color: var(--text-mute);
+  
+  @media (min-width: 768px) {
+    font-size: 0.875rem; /* md:text-sm */
+  }
+  font-weight: 500;
+}
+
+.kicker {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #EC1361;
+  letter-spacing: 0.1em;
+}
+
+/* ===== MICROINTERAÇÕES ===== */
+.card-hover {
+  transition: all 200ms ease-out;
+  transform: translateY(0);
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.button-hover {
+  transition: all 150ms ease-out;
+  transform: scale(1);
+}
+
+.button-hover:hover {
+  transform: scale(1.02);
+}
+
+.button-hover:active {
+  transform: scale(0.98);
+  transition-duration: 75ms;
+}
+
+.parallax-tilt {
+  transition: transform 300ms ease-out;
+  transform-style: preserve-3d;
+}
+
+.parallax-tilt:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(2deg) translateZ(10px);
+}
+
+/* ===== GLASSMORPHISM ===== */
+.glass {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-subtle {
+  background-color: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ===== GRADIENTES ===== */
+.gradient-primary {
+  background: linear-gradient(135deg, #EC1361 0%, #00D4FF 100%);
+}
+
+.gradient-card {
+  background: linear-gradient(135deg, #111A2B 0%, #0B1220 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #EC1361 0%, #00D4FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== SKELETONS ===== */
+.skeleton {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+}
+
+.skeleton-text {
+  height: 1rem; /* h-4 */
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  border-radius: 0.25rem; /* rounded */
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* animate-pulse */
+}
+
+.skeleton-title {
+  height: 1.5rem; /* h-6 */
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  border-radius: 0.25rem; /* rounded */
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* animate-pulse */
+}
+
+.skeleton-avatar {
+  width: 2.5rem; /* w-10 */
+  height: 2.5rem; /* h-10 */
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  border-radius: 9999px; /* rounded-full */
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* animate-pulse */
+}
+
+/* ===== FOCUS STATES (Acessibilidade) ===== */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus {
+  outline: none;
+  --ring-width: 2px;
+  box-shadow: 0 0 0 2px rgba(236, 19, 97, 0.4); /* mag-500/40 */
+  outline-offset: 2px;
+  --ring-offset-color: #111A2B; /* ink-900 */
+}
+
+.focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(236, 19, 97, 0.4), 0 0 0 4px #111A2B;
+}
+
+/* ===== ANIMAÇÕES CUSTOMIZADAS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(236, 19, 97, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(236, 19, 97, 0.6), 0 0 30px rgba(236, 19, 97, 0.4);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* ===== PROGRESS BARS ===== */
+.progress-bar {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  height: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-image: linear-gradient(to right, #EC1361, #00D4FF);
+  border-radius: 9999px;
+  transition: all 500ms ease-out;
+}
+
+/* ===== BADGES E CHIPS ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.625rem 0.125rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-primary {
+  background-color: rgba(236, 19, 97, 0.15);
+  color: #EC1361;
+  border: 1px solid rgba(236, 19, 97, 0.2);
+}
+
+.badge-success {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: rgb(74, 222, 128);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.badge-warning {
+  background-color: rgba(234, 179, 8, 0.15);
+  color: rgb(250, 204, 21);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+.badge-info {
+  background-color: rgba(34, 196, 247, 0.15);
+  color: rgb(34, 211, 238);
+  border: 1px solid rgba(34, 196, 247, 0.2);
+}
+
+/* ===== TOOLTIPS ===== */
+.tooltip {
+  position: absolute;
+  z-index: 50;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  background-color: rgba(17, 26, 43, 0.9);
+  border-radius: 0.25rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 200ms;
+  pointer-events: none;
+}
+
+.tooltip-trigger:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== SCROLLBAR CUSTOMIZADA ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #1F2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ===== RESPONSIVE UTILITIES ===== */
+@media (max-width: 640px) {
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .mobile-text {
+    font-size: 0.875rem; /* text-sm equivalent */
+  }
+}
+
+/* ===== DARK MODE OVERRIDES ===== */
+.dark {
+  color-scheme: dark;
+}
+
+.dark .glass {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .skeleton {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background-color: white;
+    color: black;
+  }
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

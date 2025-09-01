@@ -1,0 +1,187 @@
+<!-- Seção de Notícias e Empregos -->
+<section class="space-y-8">
+  
+  <!-- Header da Seção -->
+  <div class="text-center">
+    <p class="text-xs uppercase tracking-wider text-text-mute mb-2">ODS 8 • Trabalho Decente</p>
+    <h2 class="text-3xl font-extrabold text-text-base mb-4">Notícias & Oportunidades</h2>
+    <p class="text-text-mute max-w-2xl mx-auto">Mantenha-se atualizado com as últimas tendências do mercado de trabalho e oportunidades de emprego</p>
+    <span *ngIf="!isLoading" class="inline-block text-sm bg-green-500/20 text-green-400 px-3 py-1 rounded-full mt-2">API IBGE Conectada</span>
+  </div>
+  
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="flex items-center justify-center py-12">
+    <div class="rounded-xl p-8 bg-white/5 backdrop-blur border border-white/10 text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-magenta-500 mx-auto mb-4"></div>
+      <p class="text-white text-lg font-medium">Carregando notícias de emprego...</p>
+      <p class="text-text-mute text-sm mt-2">Buscando as últimas oportunidades do IBGE</p>
+    </div>
+  </div>
+
+  <!-- Filtros com Chips Temáticos -->
+  <div *ngIf="!isLoading" class="rounded-xl p-6 bg-white/5 dark:bg-white/5 backdrop-blur border border-white/10 shadow-card">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-extrabold text-text-base">Filtrar por Categoria</h3>
+      <span class="text-sm text-text-mute">{{ filteredNews.length || 0 }} resultados</span>
+    </div>
+    
+    <div class="flex flex-wrap gap-3">
+      <button *ngFor="let category of categories" 
+              (click)="selectCategory(category)"
+              [class]="'group px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ' + 
+                       (selectedCategory === category ? 
+                        'bg-mag-500 text-white shadow-glow' : 
+                        'bg-ink-800/60 text-text-mute border border-white/10 hover:border-mag-500/40 hover:text-mag-400')">
+        <span class="flex items-center gap-2">
+          <mat-icon *ngIf="category === 'Todas'" class="text-xs">search</mat-icon>
+          <mat-icon *ngIf="category === 'Tecnologia'" class="text-xs">computer</mat-icon>
+          <mat-icon *ngIf="category === 'Saúde'" class="text-xs">local_hospital</mat-icon>
+          <mat-icon *ngIf="category === 'Educação'" class="text-xs">school</mat-icon>
+          <mat-icon *ngIf="category === 'Sustentabilidade'" class="text-xs">eco</mat-icon>
+          {{ category }}
+        </span>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Lista de Notícias com Cards Modernos -->
+  <div *ngIf="!isLoading" class="space-y-6">
+    <article *ngFor="let news of filteredNews; trackBy: trackByNewsId" 
+             class="group rounded-xl p-6 bg-white/5 dark:bg-white/5 backdrop-blur border border-white/10 shadow-card hover:border-mag-500/40 transition-all duration-300">
+      
+      <!-- Header do Card -->
+      <div class="flex items-start justify-between mb-4">
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-xs px-2 py-1 rounded-full bg-mag-500/15 text-mag-500 font-semibold">
+              {{ news.category || 'Geral' }}
+            </span>
+            <span class="text-xs text-text-mute">{{ news.date | date:'dd/MM/yyyy' }}</span>
+            <span class="text-xs px-2 py-1 rounded bg-cyan-400/15 text-cyan-400">{{ news.source }}</span>
+          </div>
+          
+          <h3 class="text-xl font-extrabold text-text-base group-hover:text-mag-400 transition-colors cursor-pointer mb-2">
+            {{ news.title }}
+          </h3>
+          
+          <p class="text-text-mute leading-relaxed">{{ news.description }}</p>
+        </div>
+        
+        <!-- Botão Salvar -->
+        <button (click)="toggleSaveNews(news.id)" 
+                [class]="'p-2 rounded-lg transition-all duration-300 ' + 
+                         (news.saved ? 'bg-mag-500/20 text-mag-500' : 'bg-ink-800/60 text-text-mute hover:bg-mag-500/20 hover:text-mag-500')">
+          <svg class="w-5 h-5" [class.fill-current]="news.saved" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Metadados e Ações -->
+      <div class="flex items-center justify-between pt-4 border-t border-white/10">
+        <div class="flex items-center gap-4">
+          <span *ngIf="news.location" class="flex items-center gap-1 text-sm text-cyan-400">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+            </svg>
+            {{ news.location }}
+          </span>
+          
+          <span *ngIf="news.vacancies" class="flex items-center gap-1 text-sm text-success">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+            </svg>
+            {{ news.vacancies }} vagas
+          </span>
+          
+          <span *ngIf="news.salary" class="flex items-center gap-1 text-sm text-warning">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.51-1.31c-.562-.649-1.413-1.076-2.353-1.253V5z" clip-rule="evenodd"></path>
+            </svg>
+            {{ news.salary }}
+          </span>
+        </div>
+        
+        <div class="flex gap-2">
+          <button class="px-4 py-2 text-sm rounded-lg bg-ink-800 text-text-base border border-white/10 hover:bg-mag-500 hover:text-white hover:border-mag-500 transition-all duration-300">
+            Ler mais
+          </button>
+          <button *ngIf="news.applyUrl" class="px-4 py-2 text-sm rounded-lg bg-mag-500 text-white hover:bg-mag-600 transition-colors">
+            Candidatar-se
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
+  
+  <!-- Seção de Programas Governamentais -->
+  <div *ngIf="!isLoading" class="rounded-xl p-6 bg-gradient-to-br from-mag-500/10 to-cyan-400/10 border border-mag-500/20 shadow-card">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="p-2 rounded-lg bg-mag-500/20 text-mag-500">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"></path>
+        </svg>
+      </span>
+      <div>
+        <p class="text-xs uppercase tracking-wider text-text-mute">Governo Federal</p>
+        <h3 class="text-xl font-extrabold text-text-base">Programas de Emprego</h3>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div *ngFor="let program of governmentPrograms" 
+           class="group p-5 rounded-xl bg-ink-800/60 border border-white/10 hover:border-mag-500/30 transition-all duration-300">
+        <div class="flex items-start justify-between mb-3">
+          <h4 class="font-extrabold text-text-base group-hover:text-mag-400 transition-colors">{{ program.name }}</h4>
+          <span class="text-xs px-2 py-1 rounded bg-cyan-400/15 text-cyan-400">{{ program.target }}</span>
+        </div>
+        
+        <p class="text-sm text-text-mute mb-4 leading-relaxed">{{ program.description }}</p>
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2 py-1 rounded bg-success/15 text-success">Gratuito</span>
+            <span *ngIf="program.duration" class="text-xs text-text-mute">{{ program.duration }}</span>
+          </div>
+          
+          <button class="px-4 py-2 text-sm rounded-lg bg-mag-500 text-white hover:bg-mag-600 transition-colors">
+            Inscrever-se
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Dicas para Recém-Formados -->
+  <div class="rounded-xl p-6 bg-white/5 dark:bg-white/5 backdrop-blur border border-white/10 shadow-card">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="p-2 rounded-lg bg-warning/20 text-warning">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+        </svg>
+      </span>
+      <div>
+        <p class="text-xs uppercase tracking-wider text-text-mute">Orientação Profissional</p>
+        <h3 class="text-xl font-extrabold text-text-base">Dicas para Recém-Formados</h3>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let tip of careerTips" 
+           class="group p-5 rounded-xl bg-ink-800/60 border border-white/10 hover:border-cyan-400/30 transition-all duration-300">
+        <mat-icon class="text-3xl mb-3">{{ tip.icon }}</mat-icon>
+        <h4 class="font-extrabold text-text-base mb-2 group-hover:text-cyan-400 transition-colors">{{ tip.title }}</h4>
+        <p class="text-sm text-text-mute leading-relaxed">{{ tip.description }}</p>
+        
+        <!-- Progresso ou ação -->
+        <div class="mt-4 pt-3 border-t border-white/10">
+          <button class="text-xs text-cyan-400 hover:text-cyan-300 underline">
+            Saiba mais
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</section>

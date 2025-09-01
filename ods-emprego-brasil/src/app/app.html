@@ -1,0 +1,48 @@
+<!-- Dashboard de Emprego Brasil - ODS 4, 8 e 9 -->
+<div class="min-h-screen bg-ink-900 dark:bg-ink-900 text-text-base">
+  <!-- Main Layout -->
+  <div class="main-layout-full">
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+      <app-dashboard></app-dashboard>
+    </main>
+    
+    <!-- Footer -->
+  <footer class="bg-fiap-blue text-white py-8 mt-16">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="text-lg font-semibold mb-4">ODS - Objetivos de Desenvolvimento Sustentável</h3>
+          <p class="text-sm text-gray-300">Este projeto contribui para os ODS 4 (Educação de Qualidade), 8 (Trabalho Decente e Crescimento Econômico) e 9 (Indústria, Inovação e Infraestrutura).</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Fontes de Dados</h3>
+          <ul class="text-sm text-gray-300 space-y-2">
+            <li>• IBGE - Instituto Brasileiro de Geografia e Estatística</li>
+            <li>• Portal da Transparência</li>
+            <li>• Ministério do Trabalho e Emprego</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Desenvolvido por</h3>
+          <p class="text-sm text-gray-300">Estudantes FIAP</p>
+          <p class="text-sm text-gray-300">Projeto Acadêmico - 2024</p>
+        </div>
+      </div>
+      <div class="border-t border-gray-600 mt-8 pt-8 text-center">
+        <p class="text-sm text-gray-300">&copy; 2024 Dashboard de Emprego Brasil. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  
+
+  
+
+  
+    <!-- Skip Links para navegação -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+    <a href="#navigation" class="skip-link">Pular para a navegação</a>
+  </div>
+</div>
+
+<router-outlet />

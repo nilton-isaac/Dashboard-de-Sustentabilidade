@@ -1,0 +1,381 @@
+<!-- Botão de acesso rápido à acessibilidade -->
+<button 
+  class="accessibility-trigger"
+  (click)="togglePanel()"
+  [attr.aria-expanded]="isOpen"
+  [attr.aria-label]="isOpen ? 'Fechar configurações de acessibilidade' : 'Abrir configurações de acessibilidade'"
+  title="Configurações de Acessibilidade (Alt + A)"
+  accesskey="a">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9M15 22H13V16H11V22H9L11.5 7.5H12.5L15 22Z" fill="currentColor"/>
+  </svg>
+  <span class="sr-only">Acessibilidade</span>
+</button>
+
+<!-- Painel de configurações -->
+<div 
+  class="accessibility-panel"
+  [class.open]="isOpen"
+  [attr.aria-hidden]="!isOpen"
+  role="dialog"
+  aria-labelledby="accessibility-title"
+  aria-describedby="accessibility-description"
+  (keydown)="onKeydown($event)"
+  *ngIf="isOpen">
+  
+  <div class="panel-content">
+    <div class="panel-header">
+      <h2 id="accessibility-title" class="panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9M15 22H13V16H11V22H9L11.5 7.5H12.5L15 22Z" fill="currentColor"/>
+        </svg>
+        Personalização & Acessibilidade
+      </h2>
+      <button 
+        class="close-button"
+        (click)="togglePanel()"
+        aria-label="Fechar painel de personalização"
+        title="Fechar (Esc)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+
+    <p id="accessibility-description" class="panel-description">
+      Personalize a aparência e ajuste as configurações de acessibilidade.
+    </p>
+
+    <!-- Navegação por abas -->
+    <div class="tab-navigation" role="tablist">
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'accessibility'"
+        (click)="setActiveTab('accessibility')"
+        role="tab"
+        [attr.aria-selected]="activeTab === 'accessibility'"
+        aria-controls="accessibility-panel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9M15 22H13V16H11V22H9L11.5 7.5H12.5L15 22Z" fill="currentColor"/>
+        </svg>
+        Acessibilidade
+      </button>
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'theme'"
+        (click)="setActiveTab('theme')"
+        role="tab"
+        [attr.aria-selected]="activeTab === 'theme'"
+        aria-controls="theme-panel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3C16.97 3 21 7.03 21 12C21 16.97 16.97 21 12 21C7.03 21 3 16.97 3 12C3 7.03 7.03 3 12 3ZM12 19C15.86 19 19 15.86 19 12C19 8.14 15.86 5 12 5V19Z" fill="currentColor"/>
+        </svg>
+        Tema
+      </button>
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'font'"
+        (click)="setActiveTab('font')"
+        role="tab"
+        [attr.aria-selected]="activeTab === 'font'"
+        aria-controls="font-panel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M9,4V7H14V4H16V7H17A1,1 0 0,1 18,8V18A1,1 0 0,1 17,19H7A1,1 0 0,1 6,18V8A1,1 0 0,1 7,7H8V4H9M8,9V17H16V9H8Z" fill="currentColor"/>
+        </svg>
+        Fonte
+      </button>
+    </div>
+
+    <!-- Painel de Acessibilidade -->
+    <div 
+      id="accessibility-panel"
+      class="tab-content"
+      [class.active]="activeTab === 'accessibility'"
+      role="tabpanel"
+      [attr.aria-hidden]="activeTab !== 'accessibility'">
+      
+      <div class="settings-grid" role="group" aria-labelledby="accessibility-title">
+        
+        <!-- Alto Contraste -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="high-contrast-toggle" class="setting-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20V4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+              </svg>
+              Alto Contraste
+            </label>
+            <p class="setting-description">Aumenta o contraste das cores para melhor visibilidade</p>
+          </div>
+          <button 
+            id="high-contrast-toggle"
+            class="toggle-button"
+            [class.active]="highContrast$ | async"
+            (click)="toggleHighContrast()"
+            [attr.aria-pressed]="highContrast$ | async"
+            [attr.aria-label]="(highContrast$ | async) ? 'Desativar alto contraste' : 'Ativar alto contraste'">
+            <span class="toggle-slider" [attr.aria-hidden]="true"></span>
+            <span class="sr-only">{{ (highContrast$ | async) ? 'Ativado' : 'Desativado' }}</span>
+          </button>
+        </div>
+
+        <!-- Movimento Reduzido -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="reduced-motion-toggle" class="setting-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M13 4.07V1L8.45 5.55L13 10V6.09C15.84 6.57 18 9.03 18 12C18 14.97 15.84 17.43 13 17.91V19.93C16.95 19.44 20 16.08 20 12C20 7.92 16.95 4.56 13 4.07ZM7.1 18.32C8.26 19.22 9.61 19.76 11 19.93V17.91C10.13 17.79 9.29 17.46 8.54 16.97L7.1 18.32ZM6.09 13H4.07C4.24 14.39 4.79 15.73 5.69 16.89L7.1 15.54C6.58 14.78 6.26 13.93 6.09 13ZM7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11H6.09C6.26 10.07 6.58 9.22 7.11 8.53Z" fill="currentColor"/>
+              </svg>
+              Movimento Reduzido
+            </label>
+            <p class="setting-description">Reduz animações e transições para evitar desconforto</p>
+          </div>
+          <button 
+            id="reduced-motion-toggle"
+            class="toggle-button"
+            [class.active]="reducedMotion$ | async"
+            (click)="toggleReducedMotion()"
+            [attr.aria-pressed]="reducedMotion$ | async"
+            [attr.aria-label]="(reducedMotion$ | async) ? 'Desativar movimento reduzido' : 'Ativar movimento reduzido'">
+            <span class="toggle-slider" [attr.aria-hidden]="true"></span>
+            <span class="sr-only">{{ (reducedMotion$ | async) ? 'Ativado' : 'Desativado' }}</span>
+          </button>
+        </div>
+
+        <!-- Status do Leitor de Tela -->
+        <div class="setting-item info-only">
+          <div class="setting-info">
+            <div class="setting-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M9 9H15V15H9V9ZM12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM6 7C7.1 7 8 7.9 8 9C8 10.1 7.1 11 6 11C4.9 11 4 10.1 4 9C4 7.9 4.9 7 6 7ZM6 13C4.9 13 4 13.9 4 15C4 16.1 4.9 17 6 17C7.1 17 8 16.1 8 15C8 13.9 7.1 13 6 13ZM18 7C19.1 7 20 7.9 20 9C20 10.1 19.1 11 18 11C16.9 11 16 10.1 16 9C16 7.9 16.9 7 18 7ZM18 13C16.9 13 16 13.9 16 15C16 16.1 16.9 17 18 17C19.1 17 20 16.1 20 15C20 13.9 19.1 13 18 13Z" fill="currentColor"/>
+              </svg>
+              Leitor de Tela
+            </div>
+            <p class="setting-description">
+              Status: {{ (screenReader$ | async) ? 'Detectado' : 'Não detectado' }}
+            </p>
+          </div>
+          <div class="status-indicator" [class.active]="screenReader$ | async" [attr.aria-label]="(screenReader$ | async) ? 'Leitor de tela ativo' : 'Leitor de tela inativo'">
+            <span class="status-dot" [attr.aria-hidden]="true"></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Painel de Tema -->
+    <div 
+      id="theme-panel"
+      class="tab-content"
+      [class.active]="activeTab === 'theme'"
+      role="tabpanel"
+      [attr.aria-hidden]="activeTab !== 'theme'">
+      
+      <div class="settings-grid" role="group" aria-labelledby="accessibility-title">
+        
+        <!-- Seleção de Tema -->
+        <div class="setting-item full-width">
+          <div class="setting-info">
+            <div class="setting-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12 3C16.97 3 21 7.03 21 12C21 16.97 16.97 21 12 21C7.03 21 3 16.97 3 12C3 7.03 7.03 3 12 3ZM12 19C15.86 19 19 15.86 19 12C19 8.14 15.86 5 12 5V19Z" fill="currentColor"/>
+              </svg>
+              Tema
+            </div>
+            <p class="setting-description">Escolha entre tema claro, escuro ou automático</p>
+          </div>
+        </div>
+
+        <!-- Opções de Tema -->
+        <div class="theme-options" role="radiogroup" aria-labelledby="theme-label">
+          <button 
+            class="theme-option"
+            [class.active]="(customizationService.currentTheme$ | async) === 'light'"
+            (click)="setTheme('light')"
+            role="radio"
+            [attr.aria-checked]="(customizationService.currentTheme$ | async) === 'light'"
+            aria-label="Tema claro">
+            <div class="theme-preview light">
+              <div class="preview-header"></div>
+              <div class="preview-content"></div>
+            </div>
+            <span class="theme-name">Claro</span>
+          </button>
+          
+          <button 
+            class="theme-option"
+            [class.active]="(customizationService.currentTheme$ | async) === 'dark'"
+            (click)="setTheme('dark')"
+            role="radio"
+            [attr.aria-checked]="(customizationService.currentTheme$ | async) === 'dark'"
+            aria-label="Tema escuro">
+            <div class="theme-preview dark">
+              <div class="preview-header"></div>
+              <div class="preview-content"></div>
+            </div>
+            <span class="theme-name">Escuro</span>
+          </button>
+          
+          <button 
+            class="theme-option"
+            [class.active]="(customizationService.currentTheme$ | async) === 'auto'"
+            (click)="setTheme('auto')"
+            role="radio"
+            [attr.aria-checked]="(customizationService.currentTheme$ | async) === 'auto'"
+            aria-label="Tema automático">
+            <div class="theme-preview auto">
+              <div class="preview-header"></div>
+              <div class="preview-content"></div>
+            </div>
+            <span class="theme-name">Automático</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Painel de Fonte -->
+    <div 
+      id="font-panel"
+      class="tab-content"
+      [class.active]="activeTab === 'font'"
+      role="tabpanel"
+      [attr.aria-hidden]="activeTab !== 'font'">
+      
+      <div class="settings-grid" role="group" aria-labelledby="accessibility-title">
+        
+        <!-- Tamanho da Fonte -->
+        <div class="setting-item full-width">
+          <div class="setting-info">
+            <label for="font-size-slider" class="setting-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M9,4V7H14V4H16V7H17A1,1 0 0,1 18,8V18A1,1 0 0,1 17,19H7A1,1 0 0,1 6,18V8A1,1 0 0,1 7,7H8V4H9M8,9V17H16V9H8Z" fill="currentColor"/>
+              </svg>
+              Tamanho da Fonte
+            </label>
+            <p class="setting-description">Ajuste o tamanho do texto para melhor legibilidade</p>
+          </div>
+          <div class="font-size-control">
+            <span class="font-size-label">A</span>
+            <input 
+              id="font-size-slider"
+              type="range"
+              min="12"
+              max="24"
+              step="2"
+              [value]="fontSize$ | async"
+              (input)="setFontSize($event)"
+              class="font-size-slider"
+              aria-label="Tamanho da fonte em pixels">
+            <span class="font-size-label large">A</span>
+            <span class="font-size-value">{{ fontSize$ | async }}px</span>
+          </div>
+        </div>
+
+        <!-- Família da Fonte -->
+        <div class="setting-item full-width">
+          <div class="setting-info">
+            <label for="font-family-select" class="setting-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M5,4V7H10.5V19H13.5V7H19V4H5Z" fill="currentColor"/>
+              </svg>
+              Família da Fonte
+            </label>
+            <p class="setting-description">Escolha a fonte que melhor se adequa às suas necessidades</p>
+          </div>
+          <select 
+            id="font-family-select"
+            class="font-family-select"
+            [value]="customizationService.currentFont$ | async"
+            (change)="setFontFamily($event)"
+            aria-label="Selecionar família da fonte">
+            <option value="system">Sistema (Padrão)</option>
+            <option value="serif">Serif (Times)</option>
+            <option value="sans-serif">Sans-serif (Arial)</option>
+            <option value="monospace">Monospace (Courier)</option>
+            <option value="dyslexic">OpenDyslexic</option>
+          </select>
+        </div>
+
+        <!-- Espaçamento de Linha -->
+        <div class="setting-item full-width">
+          <div class="setting-info">
+            <label for="line-height-slider" class="setting-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M3,3H21V5H3V3M3,7H21V9H3V7M3,11H21V13H3V11M3,15H21V17H3V15M3,19H21V21H3V19Z" fill="currentColor"/>
+              </svg>
+              Espaçamento de Linha
+            </label>
+            <p class="setting-description">Ajuste o espaçamento entre as linhas do texto</p>
+          </div>
+          <div class="line-height-control">
+            <input 
+              id="line-height-slider"
+              type="range"
+              min="1"
+              max="2"
+              step="0.1"
+              [value]="customizationService.lineHeight$ | async"
+              (input)="setLineHeight($event)"
+              class="line-height-slider"
+              aria-label="Espaçamento de linha">
+            <span class="line-height-value">{{ customizationService.lineHeight$ | async }}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Atalhos de Teclado -->
+    <div class="keyboard-shortcuts">
+      <h3 class="shortcuts-title">Atalhos de Teclado</h3>
+      <div class="shortcuts-grid" role="list">
+        <div class="shortcut-item" role="listitem">
+          <kbd>Alt + A</kbd>
+          <span>Abrir configurações de acessibilidade</span>
+        </div>
+        <div class="shortcut-item" role="listitem">
+          <kbd>Tab</kbd>
+          <span>Navegar entre elementos</span>
+        </div>
+        <div class="shortcut-item" role="listitem">
+          <kbd>Esc</kbd>
+          <span>Fechar modais e menus</span>
+        </div>
+        <div class="shortcut-item" role="listitem">
+          <kbd>↑ ↓</kbd>
+          <span>Navegar em listas</span>
+        </div>
+        <div class="shortcut-item" role="listitem">
+          <kbd>Enter</kbd>
+          <span>Ativar elemento focado</span>
+        </div>
+        <div class="shortcut-item" role="listitem">
+          <kbd>Space</kbd>
+          <span>Ativar botões e checkboxes</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estatísticas (apenas para desenvolvimento) -->
+    <div class="stats-section" *ngIf="stats.announcementCount > 0">
+      <h3 class="stats-title">Estatísticas de Acessibilidade</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Anúncios:</span>
+          <span class="stat-value">{{ stats.announcementCount }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Overlay para fechar o painel -->
+<div 
+  class="accessibility-overlay"
+  [class.visible]="isOpen"
+  (click)="togglePanel()"
+  [attr.aria-hidden]="true"
+  *ngIf="isOpen">
+</div>
