@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "npm install -g @angular/cli && npm run build",
   "outputDirectory": "dist/ods-emprego-brasil",
   "rewrites": [
     {
