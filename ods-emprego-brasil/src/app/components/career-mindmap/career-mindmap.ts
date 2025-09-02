@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { GamificationService } from '../../services/gamification.service';
 
 @Component({
   selector: 'app-career-mindmap',
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './career-mindmap.html',
   styleUrl: './career-mindmap.css'
 })

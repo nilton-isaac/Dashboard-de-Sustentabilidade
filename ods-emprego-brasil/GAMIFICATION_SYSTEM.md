@@ -6,11 +6,11 @@ O sistema de gamificação foi desenvolvido para aumentar o engajamento dos usu�
 
 ## Componentes Principais
 
+
 ### 1. Sistema de Experiência (XP)
 - **XP por Nível**: 1000 pontos
 - **Progressão**: Linear, cada nível requer 1000 XP adicionais
 - **Fontes de XP**:
-  - Login diário: 50 XP
   - Visualizar vaga: 10 XP
   - Ler notícia: 15 XP
   - Visualizar estatísticas: 20 XP

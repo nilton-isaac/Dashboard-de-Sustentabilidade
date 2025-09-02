@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 interface AreaCosts {
   education: number;
@@ -38,7 +39,7 @@ interface InvestmentTip {
 @Component({
   selector: 'app-cost-benefit-analysis',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './cost-benefit-analysis.html',
   styleUrl: './cost-benefit-analysis.css'
 })
